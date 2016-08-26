@@ -1,0 +1,7 @@
+﻿<CommerceAccount xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Id>32d528bd-6beb-4308-9a3e-b9a9f1a61dc6</Id>
+  <DefaultAddress>
+    <City>US</City>
+  </DefaultAddress>
+  <ReadOnly>false</ReadOnly>
+</CommerceAccount>

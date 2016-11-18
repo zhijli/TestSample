@@ -93,42 +93,4 @@ namespace TestSample
                                                                                                           : prop.GetValue(instance, null)))));
         }
     }
-
-    /// <summary>
-    /// A helper class used to serialize and deserialize data.
-    /// </summary>
-    public class SerializationHelper
-    {
-        public byte[] SerializeDetails(IDictionary dict)
-        {
-            ws.Position = 0;
-            formatter.Serialize(ws, dict);
-            ws.SetLength(ws.Position);
-            return ws.ToArray();
-        }
-        public IDictionary DeserializeDetails(byte[] data)
-        {
-            MemoryStream rs = new MemoryStream(data);
-            return (IDictionary)formatter.Deserialize(rs);
-        }
-        public IDictionary CopyDetails(IDictionary dict)
-        {
-            ws.Position = 0;
-            formatter.Serialize(ws, dict);
-            ws.Position = 0;
-            return (IDictionary)formatter.Deserialize(ws);
-        }
-        public void ReplaceDetails(IDictionary src, IDictionary dest)
-        {
-            IDictionary srcCopy = CopyDetails(src);
-            dest.Clear();
-            IDictionaryEnumerator ie = (IDictionaryEnumerator)srcCopy.GetEnumerator();
-            while (ie.MoveNext())
-                dest.Add(ie.Key, ie.Value);
-        }
-        #region private members
-        IFormatter formatter = new BinaryFormatter();
-        MemoryStream ws = new MemoryStream();   // the stream used for writing
-        #endregion
-    }
 }

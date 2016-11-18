@@ -2,6 +2,7 @@
 using System.Text;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.Commerce.Tools.ToolsContainer.Common.Helpers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace TestSample
@@ -16,8 +17,6 @@ namespace TestSample
         [TestMethod]
         public void TestMethod1()
         {
-            var serializer = new SerializationHelper();
-
             var d = new Dictionary<string,string>();
             d["1"] = "Hi";
             d["2"] = "World";
@@ -32,8 +31,7 @@ namespace TestSample
                 bytes[i-1] = (byte) int.Parse(str.Substring(2*i,2), NumberStyles.AllowHexSpecifier);
             }
 
-            var newDic = serializer.DeserializeDetails(bytes);
-            
+     
         }
     }
 }

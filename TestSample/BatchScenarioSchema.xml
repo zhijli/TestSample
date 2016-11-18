@@ -1,0 +1,104 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="no"?>
+  <BatchScenarioSchema name="NewCsvRewardsUsingPuid">
+    <ScopeParaMeters>
+      <!--
+      <Parameter name="startDate"  type="String" />
+      <Parameter name="endDate"  type="String" />
+      -->
+    </ScopeParaMeters>
+    <InputSingleColumns>
+      <Parameter name="FinCode"  type="String"  ordinate="0" />
+      <Parameter name="ServiceRequestId"  type="String"  ordinate="1" />
+      <Parameter name="Justification"  type="String"  ordinate="2" />
+      <Parameter name="StoredValueSku"  type="String"  ordinate="3" />
+      <Parameter name="StoredValueLotExpirationDate"  type="String"  ordinate="4" />
+    </InputSingleColumns>
+    <InputMultipleColumns>
+      <Parameter name="CustomerPuid"  type="Guid" ordinate="5" />
+      <Parameter name="Amount"  type="Decimal" ordinate="6"/>
+      <Parameter name="Currency"  type="Decimal" ordinate="6"/>
+    </InputMultipleColumns>
+    <OutputColumns>
+      <Parameter name="OffsetLineItem"  type="Int32" ordinate="0"/>
+      <Parameter name="delegate_high"  type="String" ordinate="1"/>
+      <Parameter name="delegate_low"  type="String" ordinate="2"/>
+      <Parameter name="Tracking_Guid" type="String" ordinate="3"/>
+      <Parameter name="bss_line_item_id"  type="Int32" ordinate="4"/>
+      <Parameter name="FinCode"  type="String" ordinate="5"/>
+      <Parameter name="Immediately_Settle"  type="String" ordinate="6"/>
+      <Parameter name="Amount" type="String" ordinate="7"/>
+      <Parameter name="Comment_Info_XML"  type="Int32" ordinate="8"/>
+      <Parameter name="Currency"  type="String" ordinate="9"/>
+    </OutputColumns>
+   <CosmosScript>
+      <![CDATA[
+      //Parameters Sample:
+//@@startDate@@ :   "2016-01-01"
+//@@endDate@@   :   "2016-06-01"
+//@@input@@     :   "my/Input/CsvRewardsUsingPuid_Input.cst"
+//@@output@@    :   "my/Output/CsvRewardsUsingPuid_Output.ss"
+//@@StreamBasePath@@ : "shares/cp.prod"
+//@@PartnerShared@@ : "shares/cp.prod/Share_of_Commerce_PartnerShared_CommerceData/"
+
+mainRaw =
+    EXTRACT Puid : long?,
+            Amount : decimal,
+            Currency : string
+    FROM @@input@@
+    USING DefaultTextExtractor();
+
+main =
+    SELECT mainRaw.*,
+           (int?) (mainRaw.Puid >> 32) AS PuidHigh,
+           (int?) (mainRaw.Puid & 0xFFFFFFFF) AS PuidLow
+    FROM mainRaw; 
+
+//https://cosmos11.osdinfra.net/cosmos/cp.prod.tools/shares/cp.prod/Share_of_CP_Integration_PartnerData/Subscription/CTPAccountIdentity/
+//https://cosmos11.osdinfra.net/cosmos/cp.int.tools/shares/cp.eDog/Share_of_CP_Integration_PartnerData/Subscription/CTPAccountIdentity/
+aiRaw =
+    SSTREAM SPARSE STREAMSET @"@@StreamBasePath@@/Share_of_CP_Integration_PartnerData/Subscription/CTPAccountIdentity/"  
+                   PATTERN @"CTPAccountIdentity_%Y_%m_%d.ss"
+                   RANGE __date = ["2013-01-01", @@endDate@@];
+ai =
+    SELECT DISTINCT aiRaw.AccountId,
+                    aiRaw.HighPort,
+                    aiRaw.LowPort,
+                    aiRaw.BaseRoleId
+    FROM aiRaw
+    WHERE aiRaw.BaseRoleId == 4; 
+
+//https://cosmos11.osdinfra.net/cosmos/cp.prod.tools/shares/cp.prod/Share_of_Commerce_PartnerShared_CommerceData/Account/CTPAccountPaymentMethodEncrypted/
+//https://cosmos11.osdinfra.net/cosmos/cp.int.tools/shares/cp.eDog/Share_of_Integration_PartnerShared/Account/CTPAccountPaymentMethodEncrypted/
+bapmRaw =   
+    SSTREAM SPARSE STREAMSET @"@@PartnerShared@@/Account/CTPAccountPaymentMethodEncrypted/"  
+                   PATTERN @"%Y/%m/CTPAccountPaymentMethodEncrypted_%Y_%m_%d.ss"
+                   RANGE __date = ["2013-01-01", @@endDate@@];
+bapm =
+    SELECT bapmRaw.*
+    FROM bapmRaw
+    WHERE bapmRaw.PaymentMethodTypeId == 26 AND bapmRaw.PaymentMethodStatusId == 1;
+
+
+
+csv =
+    SELECT DISTINCT 
+           main.*,
+           ai.AccountId,
+           bapm.PaymentMethodId
+    FROM main
+         INNER JOIN
+             ai
+         ON main.PuidHigh == ai.HighPort AND main.PuidLow == ai.LowPort
+         LEFT JOIN
+             bapm
+         ON ai.AccountId == bapm.AccountId;
+
+OUTPUT csv
+TO SSTREAM @@output@@;
+
+
+
+      ]]>
+    </CosmosScript>
+  </BatchScenarioSchema>
+  

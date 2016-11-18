@@ -1,0 +1,18 @@
+﻿<?xml version="1.0"?>
+<ScenarioConfig xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Categories>
+    <Category>
+      <CategoryName>Billing</CategoryName>
+      <SubCategories>
+        <SubCategory>
+          <SubCategoryName>Refund</SubCategoryName>
+          <Scenarios>
+            <Scenario>
+              <ScenarioName>Out of SLA credit based on outage time range and subs GUID</ScenarioName>
+            </Scenario>
+          </Scenarios>
+        </SubCategory>
+      </SubCategories>
+    </Category>
+  </Categories>
+</ScenarioConfig>

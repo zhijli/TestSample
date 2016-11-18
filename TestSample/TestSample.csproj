@@ -141,7 +141,9 @@
     <Reference Include="Microsoft.Office.Interop.Excel, Version=14.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
-    <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <Private>False</Private>
+    </Reference>
     <Reference Include="Moq">
       <HintPath>..\packages\Moq.4.2.1408.0511\lib\net40\Moq.dll</HintPath>
     </Reference>
@@ -179,6 +181,9 @@
   <ItemGroup>
     <Compile Include="BdkId.cs" />
     <Compile Include="Bec.cs" />
+    <Compile Include="CommonHelper\SerializationHelper.cs" />
+    <Compile Include="DataModel\BatchScenarioSchema.cs" />
+    <Compile Include="DataModel\ScenarioConfig.cs" />
     <Compile Include="IdentitySample.cs" />
     <Compile Include="DataModel\CommerceAccount.cs" />
     <Compile Include="DataModel\CommerceAddress.cs" />
@@ -206,18 +211,28 @@
     <Compile Include="AsyncSample.cs" />
     <Compile Include="UnitTest2.cs" />
     <Compile Include="TraceSample.cs" />
+    <Compile Include="XmlReaderSamplecs.cs" />
     <Compile Include="VirtualFunctionSample.cs" />
     <Compile Include="XmlSample.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="AccountInfo.txt">
+    <Content Include="Data\NewScenario.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\ScenarioConfig.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="BatchScenarioSchema.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\AccountInfo.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="AccountInfo.xml">
+    <Content Include="Data\AccountInfo.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="HTMLPage1.htm" />
+    <Content Include="Data\HTMLPage1.htm" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

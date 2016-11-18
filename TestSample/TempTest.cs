@@ -58,7 +58,7 @@ namespace TestSample
         }
         private static T ParseFromXml<T>(string xmlString)
         {
-            using (var xmlReader = XmlReader.Create(new StringReader(xmlString)))
+            using (var xmlReader = System.Xml.XmlReader.Create(new StringReader(xmlString)))
             {
                 var xmlSerializer = new XmlSerializer(typeof(T));
                 var commerceAccountToUpdate = (T)xmlSerializer.Deserialize(xmlReader);

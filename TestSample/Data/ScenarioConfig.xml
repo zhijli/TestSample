@@ -1,0 +1,104 @@
+﻿<?xml version="1.0"?>
+<ScenarioConfig xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <!-- comment-->
+  <Categories name="true">
+    <Category>
+      <CategoryName>Billing</CategoryName>
+      <SubCategories>
+        <SubCategory>
+          <SubCategoryName>Refund</SubCategoryName>
+          <Scenarios>
+            <Scenario>
+              <ScenarioName>Out of SLA credit based on outage time range and subs GUID</ScenarioName>
+            </Scenario>
+            <Scenario>
+              <ScenarioName>Refund customer based on transaction date and amount</ScenarioName>
+            </Scenario>
+            <Scenario>
+              <ScenarioName>Refund customer based on balance ID</ScenarioName>
+            </Scenario>
+            <Scenario>
+              <ScenarioName>Refund customer based on purchase ID</ScenarioName>
+            </Scenario>
+            <Scenario>
+              <ScenarioName>Arbitrary refund M$ line items based on line item ID</ScenarioName>
+            </Scenario>
+          </Scenarios>
+        </SubCategory>
+        <SubCategory>
+          <SubCategoryName>Credit</SubCategoryName>
+          <Scenarios>
+            <Scenario>
+              <ScenarioName>Direct deposit of CSV based on billable account ID</ScenarioName>
+            </Scenario>
+            <Scenario>
+              <ScenarioName>Direct deposit of CSV based on customer PUID</ScenarioName>
+            </Scenario>
+			<Scenario>
+              <ScenarioName>New Direct deposit of CSV based on customer PUID</ScenarioName>
+            </Scenario>
+          </Scenarios>
+        </SubCategory>
+      </SubCategories>
+    </Category>
+
+    <Category>
+      <CategoryName>Subscription</CategoryName>
+      <SubCategories>
+        <SubCategory>
+          <SubCategoryName>CancelSubs</SubCategoryName>
+          <Scenarios>
+            <Scenario>
+              <ScenarioName>Cancel legacy subs(Xbox,WP,etc.) based on subs ID</ScenarioName>
+            </Scenario>
+            <Scenario>
+              <ScenarioName>Cancel Azure subs based on subs ID</ScenarioName>
+            </Scenario>
+          </Scenarios>
+        </SubCategory>
+        <SubCategory>
+          <SubCategoryName>ConvertSubs</SubCategoryName>
+          <Scenarios>
+            <Scenario>
+              <ScenarioName>Convert Azure subs based on subs ID</ScenarioName>
+            </Scenario>
+          </Scenarios>
+        </SubCategory>
+		<SubCategory>
+          <SubCategoryName>ApplySubs</SubCategoryName>
+          <Scenarios>
+            <Scenario>
+              <ScenarioName>Apply Subscription Discount</ScenarioName>
+            </Scenario>
+          </Scenarios>
+        </SubCategory>
+      </SubCategories>
+    </Category>
+
+    <Category>
+      <CategoryName>Payment</CategoryName>
+    </Category>
+
+    <Category>
+      <CategoryName>Account</CategoryName>
+    </Category>
+
+    <Category>
+      <CategoryName>Token</CategoryName>
+    </Category>
+
+    <Category>
+      <CategoryName>Test</CategoryName>
+      <SubCategories>
+        <SubCategory>
+          <SubCategoryName>Test</SubCategoryName>
+          <Scenarios>
+            <Scenario>
+              <ScenarioName>ScenarioTestConnection</ScenarioName>
+            </Scenario>
+          </Scenarios>
+        </SubCategory>
+      </SubCategories>
+    </Category>
+  </Categories>
+</ScenarioConfig>

@@ -9,8 +9,9 @@ namespace TestSample
 
     [TestClass]
     [DeploymentItem(@"data\ScenarioConfig.xml")]
-    public class XmlReaderSamplecs
+    public class XmlReaderSample
     {
+        //https://msdn.microsoft.com/en-us/library/a3bszkbd.aspx
         [TestMethod]
         public void DemoForHowToUseXmlReader()
         {
@@ -22,7 +23,8 @@ namespace TestSample
                 Schemas = new XmlSchemaSet { },
                 XmlResolver = new XmlUrlResolver(),
                 CheckCharacters = true,
-                ConformanceLevel = ConformanceLevel.Document
+                ConformanceLevel = ConformanceLevel.Document,
+                
 
             };
             setting.ValidationEventHandler += (sender, args) => { };

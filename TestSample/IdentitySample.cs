@@ -1,4 +1,6 @@
 ﻿using System;
+using System.IO;
+using System.Security.Claims;
 
 namespace TestSample
 {
@@ -42,16 +44,16 @@ namespace TestSample
 
             Console.WriteLine("Current user: {0}", Thread.CurrentPrincipal.Identity.Name);
 
-            var newIdentity = new GenericIdentity("zhijie Li");
-            var roles = new string[] { "Admin", "Users" };
-            var newPrincipal = new GenericPrincipal(newIdentity, roles);
-            //var newIdentity = new WindowsIdentity("zhijie li");
-            //var newPrincipal = new WindowsPrincipal(newIdentity);
+            //var newIdentity = new GenericIdentity("zhijie Li");
+            //var roles = new string[] { "Admin", "Users" };
+            //var newPrincipal = new GenericPrincipal(newIdentity, roles);
+            var newIdentity = new WindowsIdentity("yeelam");
+            var newPrincipal = new WindowsPrincipal(newIdentity);
             Thread.CurrentPrincipal = newPrincipal;
 
             Console.WriteLine("Current user: {0}", Thread.CurrentPrincipal.Identity.Name);
-
-
+            Console.WriteLine("Current user: {0}", ClaimsPrincipal.Current.Identity.Name);
+            Console.WriteLine("Current user: {0}", WindowsIdentity.GetCurrent().Name);
             Console.WriteLine("This sample completed successfully; " +
                "press Enter to exit.");
         }
@@ -128,6 +130,53 @@ namespace TestSample
             {
                Console.WriteLine(clain.ReportAllProperties());
             }
+        }
+
+        [TestMethod]
+        public void Test6()
+        {
+            Console.WriteLine("Current user: {0}", Thread.CurrentPrincipal.Identity.Name);
+
+            var newIdentity = new WindowsIdentity("yeelam");
+            var newPrincipal = new WindowsPrincipal(newIdentity);
+            Thread.CurrentPrincipal = newPrincipal;
+
+            Console.WriteLine("Current user: {0}", Thread.CurrentPrincipal.Identity.Name);
+            Console.WriteLine("Current user: {0}", ClaimsPrincipal.Current.Identity.Name);
+            Console.WriteLine("Current user: {0}", WindowsIdentity.GetCurrent().Name);
+            Console.WriteLine("This sample completed successfully; " +
+               "press Enter to exit.");
+        }
+
+        [TestMethod]
+        public void Test7()
+        {
+            var wi = new WindowsIdentity("zhijli");
+            var wp = new WindowsPrincipal(wi);
+            var wi2 = new WindowsIdentity("yeelam");
+            var wp2 = new WindowsPrincipal(wi2);
+            Console.WriteLine(wi.IsAuthenticated);
+            Console.WriteLine(wi2.IsAuthenticated);
+
+            Console.WriteLine("Before: {0}:", ClaimsPrincipal.Current.Identity.Name);
+            Console.WriteLine("Before: {0}:", ClaimsPrincipal.Current.Identity.IsAuthenticated);
+            Console.WriteLine("Before: {0}:", WindowsIdentity.GetCurrent().Name);
+            Console.WriteLine("Before: {0}:", WindowsIdentity.GetCurrent().IsAuthenticated);
+            //Console.WriteLine(System.IO.File.ReadAllText(@"D:\a.txt"));
+            using (wi2.Impersonate())
+            {
+                Console.WriteLine("In: {0}:", ClaimsPrincipal.Current.Identity.Name);
+                Console.WriteLine("In: {0}:", ClaimsPrincipal.Current.Identity.IsAuthenticated);
+                Console.WriteLine("In: {0}:", WindowsIdentity.GetCurrent().Name);
+                Console.WriteLine("In: {0}:", WindowsIdentity.GetCurrent().IsAuthenticated);
+                Console.WriteLine(System.IO.File.ReadAllText(@"D:\a.txt"));
+            }
+
+            Console.WriteLine("After: {0}:", ClaimsPrincipal.Current.Identity.Name);
+            Console.WriteLine("After: {0}:", ClaimsPrincipal.Current.Identity.IsAuthenticated);
+            Console.WriteLine("After: {0}:", WindowsIdentity.GetCurrent().Name);
+            Console.WriteLine("After: {0}:", WindowsIdentity.GetCurrent().IsAuthenticated);
+            Console.WriteLine(System.IO.File.ReadAllText(@"D:\a.txt"));
         }
 
         private static void PrintPrincipalInformation()
@@ -256,11 +305,11 @@ namespace TestSample
             // Display the SIDs for the groups the current user belongs to.
             Console.WriteLine("Display the SIDs for the groups the current user belongs to.");
             IdentityReferenceCollection irc = windowsIdentity.Groups;
-            foreach (IdentityReference ir in irc)
-            {
-                string account = new System.Security.Principal.SecurityIdentifier(ir.Value).Translate(typeof(System.Security.Principal.NTAccount)).ToString();
-                Console.WriteLine("Sid: {0}, Name:{1}", ir.Value,account);
-            }
+            //foreach (IdentityReference ir in irc)
+            //{
+            //    string account = new System.Security.Principal.SecurityIdentifier(ir.Value).Translate(typeof(System.Security.Principal.NTAccount)).ToString();
+            //    Console.WriteLine("Sid: {0}, Name:{1}", ir.Value,account);
+            //}
             TokenImpersonationLevel token = windowsIdentity.ImpersonationLevel;
             Console.WriteLine("The impersonation level for the current user is : " + token.ToString());
         }

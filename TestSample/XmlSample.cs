@@ -134,5 +134,20 @@ namespace TestSample
             
 
         }
+
+        [TestMethod]
+        public void ScenarioConfig1()
+        {
+            FileStream file = new FileStream("ScenarioConfig.xml", FileMode.OpenOrCreate);
+            var sr = new StreamReader(file);
+            var sc = SerializationHelper.Deserialize<ScenarioConfig>(sr.ReadToEnd());
+
+            FileStream file1 = new FileStream("NewScenario.xml", FileMode.OpenOrCreate);
+            var sr1 = new StreamReader(file1);
+            var ns = SerializationHelper.Deserialize<ScenarioConfig>(sr1.ReadToEnd());
+
+
+
+        }
     }
 }

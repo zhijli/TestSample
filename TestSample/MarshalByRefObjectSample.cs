@@ -24,8 +24,8 @@ namespace TestSample
         [TestMethod]
         public void MarshalByRefObjectSampleTest()
         {
-            TcpChannel chan1 = new TcpChannel(8085);
-            HttpChannel chan2 = new HttpChannel(8086);
+            TcpChannel chan1 = new TcpChannel(18085);
+            HttpChannel chan2 = new HttpChannel(18086);
 
             ChannelServices.RegisterChannel(chan1, false);
             ChannelServices.RegisterChannel(chan2, false);
@@ -47,6 +47,23 @@ namespace TestSample
             Console.WriteLine(
                 "Client1 TCP HelloUserMethod {0}",
                 obj1.HelloUserMethod(new User("张生", true))); //将类作为参数
+        }
+
+        [TestMethod]
+        public void Test()
+        {
+            // Create an ordinary instance in the current AppDomain
+            Worker localWorker = new Worker();
+            localWorker.PrintDomain();
+
+            // Create a new application domain, create an instance
+            // of Worker in the application domain, and execute code
+            // there.
+            AppDomain ad = AppDomain.CreateDomain("New domain");
+            Worker remoteWorker = (Worker)ad.CreateInstanceAndUnwrap(
+                typeof(Worker).Assembly.FullName,
+                "Worker");
+            remoteWorker.PrintDomain();
         }
 
         public class HelloServer : MarshalByRefObject
@@ -96,6 +113,15 @@ namespace TestSample
                 set { male = value; }
             }
 
+        }
+
+        public class Worker : MarshalByRefObject
+        {
+            public void PrintDomain()
+            {
+                Console.WriteLine("Object is executing in AppDomain \"{0}\"",
+                    AppDomain.CurrentDomain.FriendlyName);
+            }
         }
     }
 }

@@ -193,6 +193,8 @@
     <Compile Include="DesignPattern\Singleton.cs" />
     <Compile Include="EventLogSample.cs" />
     <Compile Include="HttpClientSample.cs" />
+    <Compile Include="Interview\BinarySearchTree.cs" />
+    <Compile Include="Interview\BinaryTree.cs" />
     <Compile Include="Interview\ReverseWord.cs" />
     <Compile Include="Interview\String2IntTest.cs" />
     <Compile Include="MarshalByRefObjectSample.cs" />

@@ -8,14 +8,16 @@ using Newtonsoft.Json;
 
 namespace TestSample
 {
+    using Newtonsoft.Json.Serialization;
+
     [TestClass]
     public class JsonConvertSample
-    {
+    {  
         [TestMethod]
         public void JsonConvert_SerializeObject()
         {
-            string serializeStr = "{\"Id\":1,\"Name\":\"Tom\"}";
-            var order = new Order(1, "Tom");
+            string serializeStr = "{\"Id\":1,\"FirstName\":\"Tom\",\"LastName\":\"Li\"}";
+            var order = new Order(1, "Tom", "Li");
             var str = JsonConvert.SerializeObject(order);
             Assert.AreEqual(serializeStr, str);
         }
@@ -23,11 +25,12 @@ namespace TestSample
         [TestMethod]
         public void JsonConvert_DeserializeObject()
         {
-            string serializeStr = "{\"Id\":1,\"Name\":\"Tom\"}";
-            var expectOrder = new Order(1, "Tom");
+            string serializeStr = "{\"Id\":1,\"FirstName\":\"Tom\",\"LastName\":\"Li\"}";
+            var expectOrder = new Order(1, "Tom", "Li");
             var order = JsonConvert.DeserializeObject<Order>(serializeStr);
             Assert.AreEqual(expectOrder.Id, order.Id);
-            Assert.AreEqual(expectOrder.Name, order.Name);
+            Assert.AreEqual(expectOrder.FirstName, order.FirstName);
+            Assert.AreEqual(expectOrder.LastName, order.LastName);
         }
 
         [TestMethod]
@@ -41,8 +44,8 @@ namespace TestSample
         [TestMethod]
         public void JsonSerialize()
         {
-            string serializeStr = "{\"Id\":1,\"Name\":\"Tom\"}";
-            var expectOrder = new Order(1, "Tom");
+            string serializeStr = "{\"Id\":1,\"FirstName\":\"Tom\",\"LastName\":\"Li\",}";
+            var expectOrder = new Order(1, "Tom" ,"Li");
             var serializer = new JsonSerializer();
             using (var sw = new StringWriter())
             using (var jw = new JsonTextWriter(sw))
@@ -81,17 +84,29 @@ namespace TestSample
                 }
             }
         }
+
+        [TestMethod]
+        public void JsonSerialize_To_lowerCamelCase()
+        {
+            var expectOrder = new Order(1, "Tom", "Li");
+            var setting = new JsonSerializerSettings();
+            setting.ContractResolver = new CamelCasePropertyNamesContractResolver();
+            var str = JsonConvert.SerializeObject(expectOrder, setting);
+            Console.Write(str);
+        }
     }
 
     class Order
     {
-        public Order(int id, string name)
+        public Order(int id, string firstName, string lastName)
         {
             this.Id = id;
-            this.Name = name;
+            this.FirstName = firstName;
+            this.LastName = lastName;
         }
         public int Id;
-        public string Name;
+        public string FirstName;
+        public string LastName;
     }
 
 

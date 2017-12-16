@@ -92,5 +92,19 @@ namespace TestSample
                                                                   (arrayTypes.Contains(prop.PropertyType) ? string.Join(", ", (IEnumerable<string>)prop.GetValue(instance, null))
                                                                                                           : prop.GetValue(instance, null)))));
         }
+
+       public static void Swap<T>(T lhs, T rhs) where T : class
+        {
+            T temp = lhs;
+            lhs = rhs;
+            rhs = temp;
+        }
+
+        public static void Swap<T>( ref T lhs, ref T  rhs) where T : struct
+        {
+            T temp = lhs;
+            lhs = rhs;
+            rhs = temp;
+        }
     }
 }
